@@ -1,11 +1,12 @@
 const express = require("express");
-const { appendFile } = require("fs");
 
 const router = express.Router();
 
 const videosData = require('../data/videos-data.json')
 
 const videosSimple = require('../data/videos.json')
+
+const uuid = require('uuid')
 
 
 router.use(express.json());
@@ -17,32 +18,33 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
     res.send(videosData.find((obj) => {
-        // return obj.id === req
         return obj.id === `${req.params.id}`
 
     }))
 })
 
-//new stuff below
-router.post('/', (req, res) => {
 
+
+router.post('/', (req, res) => {
+    let randomID = uuid.v4()
     const newVidSimple = {
         title: req.body.title,
         channel: "John",
-        image: "https://i.imgur.com/5qyCZrD.jpg",
-        id: "4"
+        image: "http://localhost:8080/static/image9.jpeg",
+        id: randomID
+
     }
 
     const newVid = {
         title: req.body.title,
         channel: "John",
-        image: "https://i.imgur.com/5qyCZrD.jpg",
-        id: "4",
+        image: "http://localhost:8080/static/image9.jpeg",
+        id: randomID,
         description: req.body.description,
         views: `100`,
         likes: `100`,
         duration: "3:00",
-        timestamp: "1630656720000",
+        timestamp: 1630656720000,
         comments: [
             {
                 "name": "John Basedow",
@@ -67,9 +69,7 @@ router.post('/', (req, res) => {
     }
     videosSimple.push(newVidSimple);
     videosData.push(newVid);
-    console.log(req.body);
 })
 
 
-//end new stuff
 module.exports = router;
